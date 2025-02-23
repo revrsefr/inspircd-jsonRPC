@@ -68,5 +68,3 @@ json HandleUserSetUsername(const json& params);
 json HandleUserSetRealname(const json& params);
 json HandleUserSetVhost(const json& params);
 json HandleUserSetMode(const json& params);
-json HandleUserSetSnomask(const json& params);
-json HandleUserSetOper(const json& params);

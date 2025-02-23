@@ -126,24 +126,3 @@ json HandleUserSetMode(const json& params)
 
 	return {{"result", "User mode changed successfully"}};
 }
-
-// Handle user.set_snomask
-json HandleUserSetSnomask(const json& params)
-{
-	if (!params.contains("nick") || !params.contains("snomask"))
-		return CreateError("Missing parameters: nick, snomask", JSON_RPC_ERROR_INVALID_PARAMS);
-
-	std::string nick = params["nick"].get<std::string>();
-	std::string snomask = params["snomask"].get<std::string>();
-
-	User* user = FindUserByNick(nick);
-	if (!user)
-		return CreateError("User not found", JSON_RPC_ERROR_NOT_FOUND);
-
-	// Apply snomask as a user mode change (snomasks are a type of user mode)
-	Modes::ChangeList changelist;
-	ServerInstance->Modes.ModeParamsToChangeList(user, MODETYPE_USER, {"+" + snomask}, changelist);
-	ServerInstance->Modes.Process(user, nullptr, nullptr, changelist, ModeParser::MODE_LOCALONLY);
-
-	return {{"result", "Snomask set successfully"}};
-}
